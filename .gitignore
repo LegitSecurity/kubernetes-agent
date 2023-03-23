@@ -1,0 +1,8 @@
+
+.vscode/launch.json
+chisel.exe
+windows/err.txt
+windows/out.txt
+windows/download/chisel.gz
+.idea
+legit_signed_broker.exe
