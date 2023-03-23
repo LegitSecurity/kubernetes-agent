@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "legit-broker.fullname" . }}
+  labels:
+    {{- include "legit-broker.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "legit-broker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "legit-broker.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+           - name: BROKER_IDENTIFIER
+             value: {{ required "A broker identifier value must be set!" .Values.legitBroker.identifier }}
+          {{- if .Values.legitBroker.BROKER_ENDPOINT }}
+           - name: BROKER_ENDPOINT
+             value: {{ .Values.legitBroker.brokerEndpoint }}
+          {{- end }}
+           {{- if .Values.legitBroker.proxy }}
+           - name: BROKER_PROXY
+             value: {{ .Values.legitBroker.proxy }}
+           {{- end }}
+        - name: {{ .Chart.ProxyName }}
+          image: "{{ .Values.image-kubectl-proxy.repository }}:{{ .Values.image-kubectl-proxy.tag | default .Chart.ProxyVersion }}"
+          imagePullPolicy: {{ .Values.image-kubectl-proxy.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+          
