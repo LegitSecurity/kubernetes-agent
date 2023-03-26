@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "legit-broker.fullname" . }}
+  name: legit-code-to-cloud-deployment
   labels:
-    {{- include "legit-broker.labels" . | nindent 4 }}
+    {{- include "code-to-cloud.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "legit-broker.selectorLabels" . | nindent 6 }}
+      {{- include "code-to-cloud.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "legit-broker.selectorLabels" . | nindent 8 }}
+            {{- include "code-to-cloud.labels" . | nindent 8 }}
     spec:
+      serviceAccountName: legit-code-to-cloud-sa
       containers:
         - name: {{ .Chart.Name }}-broker
-          image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag | default .Chart.BrokerVersion }}"
+          image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag }}"
           imagePullPolicy: {{ .Values.image.broker.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -27,13 +28,13 @@ spec:
            - name: BROKER_ENDPOINT
              value: {{ .Values.legitBroker.brokerEndpoint }}
           {{- end }}
-           {{- if .Values.legitBroker.proxy }}
+          {{- if .Values.legitBroker.proxy }}
            - name: BROKER_PROXY
              value: {{ .Values.legitBroker.proxy }}
-           {{- end }}
+          {{- end }}
            
         - name: {{ .Chart.Name }}-proxy
-          image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.ProxyVersion }}"
+          image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag }}"
           imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
