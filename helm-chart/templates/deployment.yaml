@@ -15,9 +15,9 @@ spec:
         {{- include "legit-broker.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Chart.Name }}-broker
+          image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag | default .Chart.BrokerVersion }}"
+          imagePullPolicy: {{ .Values.image.broker.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
@@ -31,9 +31,10 @@ spec:
            - name: BROKER_PROXY
              value: {{ .Values.legitBroker.proxy }}
            {{- end }}
-        - name: {{ .Chart.ProxyName }}
-          image: "{{ .Values.image-kubectl-proxy.repository }}:{{ .Values.image-kubectl-proxy.tag | default .Chart.ProxyVersion }}"
-          imagePullPolicy: {{ .Values.image-kubectl-proxy.pullPolicy }}
+           
+        - name: {{ .Chart.Name }}-proxy
+          image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag | default .Chart.ProxyVersion }}"
+          imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 

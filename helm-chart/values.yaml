@@ -1,19 +1,18 @@
 replicaCount: 1
 
 image:
-  repository: public.ecr.aws/w6m0t6m4/legit-broker
-  pullPolicy: IfNotPresent
-  tag: "1.0.5"
-
-image-kubectl-proxy:
-  repository: public.ecr.aws/w6m0t6m4/legit-kubectl-proxy
-  pullPolicy: IfNotPresent
-  tag: "1.0.0"
+  broker:
+    repository: public.ecr.aws/w6m0t6m4/legit-broker
+    pullPolicy: IfNotPresent
+    tag: "1.0.5"
+  proxy:
+    repository: public.ecr.aws/w6m0t6m4/legit-kubectl-proxy
+    pullPolicy: IfNotPresent
+    tag: "1.0.0"
 
 legitBroker:
   identifier: "" # Your broker identifier goes here
 #  proxy: # If the broker needs a proxy to access the Legit app, set it here (e.g http://example.com)
-#  client_url: # Used for gitlab prevention. Set to your legit host (e.g legit.legitsecurity.co)
 
 imagePullSecrets: []
 nameOverride: ""
@@ -35,3 +34,10 @@ resources:
   limits:
     memory: "512Mi"
     cpu: "500m"
+
+podSecurityContext:
+securityContext:
+podAnnotations:
+nodeSelector:
+tolerations:
+affinity:
