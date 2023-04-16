@@ -3,13 +3,13 @@ entries:
   legit-code-to-cloud-deployment:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-03-27T16:37:47.373375+03:00"
+    created: "2023-04-16T11:30:15.611877+03:00"
     description: A Helm chart for Kubernetes that connects the cluster for creating
       code to cloud integration
-    digest: a0fe8e2f7332bad67ba4d94a082046f60317e10d337e3bb7bf7b25415b665cb4
+    digest: 86fcccf97c1bb997851fa621586cfafce10d7e5c28152078c38039b6fcb7949b
     name: legit-code-to-cloud-deployment
     type: application
     urls:
     - charts/legit-code-to-cloud-deployment-1.0.0.tgz
     version: 1.0.0
-generated: "2023-03-27T16:37:47.37211+03:00"
+generated: "2023-04-16T11:30:15.610852+03:00"

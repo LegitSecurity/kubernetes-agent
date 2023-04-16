@@ -24,7 +24,6 @@ spec:
           env:
            - name: BROKER_IDENTIFIER
              value: {{ required "A broker identifier value must be set!" .Values.legitBroker.identifier }}
-          {{- if .Values.legitBroker.BROKER_ENDPOINT }}
            - name: BROKER_ENDPOINT
              value: {{ .Values.legitBroker.brokerEndpoint }}
           {{- end }}
