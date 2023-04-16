@@ -26,7 +26,6 @@ spec:
              value: {{ required "A broker identifier value must be set!" .Values.legitBroker.identifier }}
            - name: BROKER_ENDPOINT
              value: {{ .Values.legitBroker.brokerEndpoint }}
-          {{- end }}
           {{- if .Values.legitBroker.proxy }}
            - name: BROKER_PROXY
              value: {{ .Values.legitBroker.proxy }}
