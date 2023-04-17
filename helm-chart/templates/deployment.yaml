@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: legit-code-to-cloud-deployment
+  name: legit-kubernetes-agent
   labels:
-    {{- include "code-to-cloud.labels" . | nindent 4 }}
+    {{- include "kubernetes-agent.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "code-to-cloud.labels" . | nindent 6 }}
+      {{- include "kubernetes-agent.labels" . | nindent 6 }}
   template:
     metadata:
       labels:
-            {{- include "code-to-cloud.labels" . | nindent 8 }}
+            {{- include "kubernetes-agent.labels" . | nindent 8 }}
     spec:
-      serviceAccountName: legit-code-to-cloud-sa
+      serviceAccountName: legit-kubernetes-agent-sa
       containers:
         - name: {{ .Chart.Name }}-broker
           image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag }}"

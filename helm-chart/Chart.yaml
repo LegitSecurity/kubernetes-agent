@@ -1,5 +1,5 @@
 apiVersion: v2
-name: legit-code-to-cloud-deployment
+name: legit-kubernetes-agent
 description: A Helm chart for Kubernetes that connects the cluster for creating code to cloud integration
 
 # A chart can be either an 'application' or a 'library' chart.
