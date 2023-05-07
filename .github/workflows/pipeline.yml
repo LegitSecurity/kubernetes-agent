@@ -1,0 +1,17 @@
+name: Legit kubernetes agent 
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: helm-lint
+        run: |
+          cd helm-chart \
+          && helm lint . \
+          && cd -
