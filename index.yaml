@@ -3,13 +3,13 @@ entries:
   legit-kubernetes-agent:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2023-04-17T23:30:31.389807+03:00"
+    created: "2023-05-07T15:13:06.571234+03:00"
     description: A Helm chart for Kubernetes that connects the cluster for creating
       code to cloud integration
-    digest: 698895d67e5011d6b11973df5695b8a8d8e6b51f069f39b85a4537ebe21cc505
+    digest: df33c7fc435a748b3af67de88b4373db5d2f82a5a02bf28f47ec5b3a2a9d2cf9
     name: legit-kubernetes-agent
     type: application
     urls:
     - charts/legit-kubernetes-agent-1.0.0.tgz
     version: 1.0.0
-generated: "2023-04-17T23:30:31.388881+03:00"
+generated: "2023-05-07T15:13:06.569114+03:00"
