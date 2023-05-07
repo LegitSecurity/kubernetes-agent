@@ -10,6 +10,7 @@ jobs:
   helm-lint:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: helm-lint
         run: |
           cd helm-chart \
