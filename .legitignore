@@ -1,3 +1,4 @@
 value_71FE8E3A2761D7BC87BAC45F564C864D # type: iac, rule name: "Ensure the base image uses a non latest version tag"
 value_image_cgr.dev/chainguard/alpine-base:latest # type: pipeline
 value_url_https://dl.k8s.io/release/$(curl # type: pipeline
+value_image_actions/checkout@v3
