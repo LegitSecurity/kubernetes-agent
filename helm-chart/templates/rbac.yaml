@@ -1,7 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: legit-kubernetes-agent-role
+  name: {{ .Chart.Name }}
 rules:
   - apiGroups: [""]
     resources: ["pods", "namespaces", "nodes"]
@@ -18,12 +18,12 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: legit-kubernetes-agent-binding
+  name: {{ .Chart.Name }}
 subjects:
 - kind: ServiceAccount
-  name: legit-kubernetes-agent-sa
+  name: {{ .Chart.Name }}
   namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: legit-kubernetes-agent-role
+  name: {{ .Chart.Name }}
   apiGroup: rbac.authorization.k8s.io

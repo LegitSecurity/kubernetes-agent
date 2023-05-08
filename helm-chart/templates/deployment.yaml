@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: legit-kubernetes-agent
+  name: {{ .Chart.Name }}
   labels:
     {{- include "kubernetes-agent.labels" . | nindent 4 }}
 spec:
@@ -14,21 +14,25 @@ spec:
       labels:
             {{- include "kubernetes-agent.labels" . | nindent 8 }}
     spec:
-      serviceAccountName: legit-kubernetes-agent-sa
+      serviceAccountName: {{ .Chart.Name }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-broker
+        securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag }}"
           imagePullPolicy: {{ .Values.image.broker.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
            - name: BROKER_IDENTIFIER
-             value: {{ required "A broker identifier value must be set!" .Values.legitBroker.identifier }}
+             value: {{ required "A broker identifier value must be set!" .Values.agentIdentifier }}
            - name: BROKER_ENDPOINT
-             value: {{ .Values.legitBroker.brokerEndpoint }}
-          {{- if .Values.legitBroker.proxy }}
+             value: {{ .Values.agentEndpoint }}
+          {{- if .Values.agentProxy }}
            - name: BROKER_PROXY
-             value: {{ .Values.legitBroker.proxy }}
+             value: {{ .Values.agentProxy }}
           {{- end }}
            
         - name: {{ .Chart.Name }}-proxy
