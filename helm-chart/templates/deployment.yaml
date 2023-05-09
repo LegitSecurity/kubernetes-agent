@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ template "kubernetes-agent.fullname" . }}
   labels:
     {{- include "kubernetes-agent.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "kubernetes-agent.labels" . | nindent 6 }}
+      {{- include "kubernetes-agent.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
             {{- include "kubernetes-agent.labels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ .Chart.Name }}
+      serviceAccountName: {{ template "kubernetes-agent.fullname" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-broker
-        securityContext:
+        - name: "{{ template "kubernetes-agent.fullname" . }}-broker"
+          securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag }}"
           imagePullPolicy: {{ .Values.image.broker.pullPolicy }}
@@ -35,7 +35,7 @@ spec:
              value: {{ .Values.agentProxy }}
           {{- end }}
            
-        - name: {{ .Chart.Name }}-proxy
+        - name: "{{ template "kubernetes-agent.fullname" . }}-proxy"
           image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag }}"
           imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
           resources:
