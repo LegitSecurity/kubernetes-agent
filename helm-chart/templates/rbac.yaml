@@ -1,7 +1,12 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Chart.Name }}
+  labels:
+    app: {{ template "kubernetes-agent.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ include "kubernetes-agent.fullname" . }}
 rules:
   - apiGroups: [""]
     resources: ["pods", "namespaces", "nodes"]
@@ -14,16 +19,16 @@ rules:
     verbs: ["get", "list", "watch"]
 
 ---
-
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ .Chart.Name }}
 subjects:
-- kind: ServiceAccount
-  name: {{ .Chart.Name }}
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ .Chart.Name }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: {{ .Chart.Name }}
   apiGroup: rbac.authorization.k8s.io
+r

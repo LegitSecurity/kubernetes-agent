@@ -10,9 +10,10 @@ image:
     pullPolicy: IfNotPresent
     tag: "1.0.0"
 
-agentIdentifier: "" # Your broker identifier goes here
-agentEndpoint: "https://app.legitsecurity.co/broker"
-#agentProxy: # If the broker needs a proxy to access the Legit app, set it here (e.g http://example.com)
+agent:
+  identifier: "aa" # Your broker identifier goes here
+  endpoint: "https://app.legitsecurity.co/broker"
+  #proxy: # If the broker needs a proxy to access the Legit app, set it here (e.g http://example.com)
 
 imagePullSecrets: []
 nameOverride: ""

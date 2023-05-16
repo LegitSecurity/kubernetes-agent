@@ -11,10 +11,14 @@ spec:
       {{- include "kubernetes-agent.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
       labels:
-            {{- include "kubernetes-agent.labels" . | nindent 8 }}
+            {{- include "kubernetes-agent.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ template "kubernetes-agent.fullname" . }}
+      serviceAccountName: {{ include "kubernetes-agent.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -27,9 +31,9 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
            - name: BROKER_IDENTIFIER
-             value: {{ required "A broker identifier value must be set!" .Values.agentIdentifier }}
+             value: {{ required "A broker identifier value must be set!" .Values.agent.identifier }}
            - name: BROKER_ENDPOINT
-             value: {{ .Values.agentEndpoint }}
+             value: {{ .Values.agent.endpoint }}
           {{- if .Values.agentProxy }}
            - name: BROKER_PROXY
              value: {{ .Values.agentProxy }}
