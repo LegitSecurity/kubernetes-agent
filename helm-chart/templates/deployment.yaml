@@ -31,12 +31,15 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
            - name: BROKER_IDENTIFIER
-             value: {{ required "A broker identifier value must be set!" .Values.agent.identifier }}
+             valueFrom:
+              secretKeyRef:
+                name: {{ include "kubernetes-agent.fullname" . }}
+                key: identifier  
            - name: BROKER_ENDPOINT
              value: {{ .Values.agent.endpoint }}
-          {{- if .Values.agentProxy }}
+          {{- if .Values.agent.proxy }}
            - name: BROKER_PROXY
-             value: {{ .Values.agentProxy }}
+             value: {{ .Values.agent.proxy }}
           {{- end }}
            
         - name: "{{ template "kubernetes-agent.fullname" . }}-proxy"
