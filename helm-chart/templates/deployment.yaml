@@ -1,40 +1,63 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: legit-code-to-cloud-deployment
+  name: {{ template "kubernetes-agent.fullname" . }}
   labels:
-    {{- include "code-to-cloud.labels" . | nindent 4 }}
+    {{- include "kubernetes-agent.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "code-to-cloud.labels" . | nindent 6 }}
+      {{- include "kubernetes-agent.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
       labels:
-            {{- include "code-to-cloud.labels" . | nindent 8 }}
+            {{- include "kubernetes-agent.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: legit-code-to-cloud-sa
+      serviceAccountName: {{ include "kubernetes-agent.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}-broker
+        - name: "{{ template "kubernetes-agent.fullname" . }}-broker"
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.broker.repository }}:{{ .Values.image.broker.tag }}"
           imagePullPolicy: {{ .Values.image.broker.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
            - name: BROKER_IDENTIFIER
-             value: {{ required "A broker identifier value must be set!" .Values.legitBroker.identifier }}
+             valueFrom:
+              secretKeyRef:
+                name: {{ include "kubernetes-agent.fullname" . }}
+                key: identifier  
            - name: BROKER_ENDPOINT
-             value: {{ .Values.legitBroker.brokerEndpoint }}
-          {{- if .Values.legitBroker.proxy }}
+             value: {{ .Values.agent.endpoint }}
+          {{- if .Values.agent.proxy }}
            - name: BROKER_PROXY
-             value: {{ .Values.legitBroker.proxy }}
+             value: {{ .Values.agent.proxy }}
           {{- end }}
            
-        - name: {{ .Chart.Name }}-proxy
+        - name: "{{ template "kubernetes-agent.fullname" . }}-proxy"
           image: "{{ .Values.image.proxy.repository }}:{{ .Values.image.proxy.tag }}"
           imagePullPolicy: {{ .Values.image.proxy.pullPolicy }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 
           
